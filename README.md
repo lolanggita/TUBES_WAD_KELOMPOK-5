@@ -1,61 +1,107 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# **UKM Platform - Laravel Web App**
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi platform sistem informasi untuk mendukung kegiatan UKM di lingkungan kampus Telkom University
 
-## About Laravel
+## 📦 Tech Stack
+- Framework: Laravel 11+
+- Bahasa: PHP 8.x
+- Database: MySQL
+- Tools: Git, Postman, Composer
+  
+## **Cara Clone dan Setup Proyek**
+**Clone Repository (Hanya Sekali di Awal)**
+1. Clone Repository
+   ```bash
+   git clone https://github.com/lolanggita/TUBES_WAD_KELOMPOK-5.git
+   cd nama-repo [TUBES_WAD_KELOMPOK-5]
+2. Install Depedency
+   composer install
+   npm install
+3. Setup Environment
+   sesuaikan konfigurasi database pada file .env
+  **DB_DATABASE=nama_database
+   DB_USERNAME=root
+   DB_PASSWORD=**
+5. Generate Key & Migrate
+   php artisan key:generate
+   php artisan migrate atau php artisan migrate:fresh
+6. Jalankan Server
+   php artisan serve
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Struktur Folder Utama (Setelah Scaffold Laravel + Breeze + Fitur Awal)
+📁 project-root/
+├── 📁 app/
+│   ├── 📁 Http/
+│   │   ├── 📁 Controllers/
+│   │   │   ├── Auth/                     <-- Dari Breeze
+│   │   │   ├── CommentController.php     <-- Untuk komentar
+│   │   │   ├── DashboardController.php   <-- Untuk dashboard utama
+│   │   │   ├── EventController.php       <-- Untuk postingan kegiatan
+│   │   │   ├── EventRegistrationController.php <-- Untuk registrasi
+│   │   │   ├── GalleryController.php     <-- Untuk galeri UKM
+│   │   │   ├── ReportController.php      <-- Untuk pengaduan
+│   │   │   └── UKMController.php         <-- Untuk profil UKM
+│   ├── 📁 Models/
+│   │   ├── User.php
+│   │   ├── Event.php
+│   │   ├── Comment.php
+│   │   ├── Report.php
+│   │   ├── UKM.php
+│   │   ├── Gallery.php
+│   │   └── EventRegistration.php
+├── 📁 database/
+│   ├── 📁 migrations/
+│   │   ├── 202x_xx_xx_create_events_table.php
+│   │   ├── 202x_xx_xx_create_comments_table.php
+│   │   ├── 202x_xx_xx_create_reports_table.php
+│   │   ├── 202x_xx_xx_create_ukms_table.php
+│   │   ├── 202x_xx_xx_create_galleries_table.php
+│   │   └── 202x_xx_xx_create_event_registrations_table.php
+├── 📁 routes/
+│   ├── web.php        <-- untuk route user/login/view
+│   └── api.php        <-- endpoint untuk akses API via Postman
+├── 📁 resources/
+│   ├── 📁 views/       <-- view blade jika digunakan
+│   │   └── ...         <-- ex: events, dashboard, etc.
+├── 📁 public/
+│   └── 📁 storage/ (jika nanti upload file)
+├── .env               <-- konfigurasi koneksi DB, APP_KEY, dll.
+├── README.md          <-- panduan kerja proyek
+└── ...
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Pengarahan pengerjaan 
+| Fitur                        | File Terkait                                                    | Tanggung Jawab Developer | Penjelasan Pekerjaan                                                                                                               |
+| ---------------------------- | --------------------------------------------------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| 1. Postingan Kegiatan        | EventController, Event model, migration events                  | Anggota 1                | Implementasi CRUD postingan kegiatan (create, update, delete, list), dengan tipe kegiatan yang bisa memiliki registrasi atau tidak |
+| 2. Komentar Postingan        | CommentController, Comment model, migration comments            | Anggota 2                | Komentar untuk postingan. Komentar harus terhubung ke event dan user                                                               |
+| 3. Registrasi dari Postingan | EventRegistrationController, EventRegistration model, migration | Anggota 3                | Pengguna dapat mendaftar ke event jika `is_registrable == true`. Buat form + validasi API untuk registrasi                         |
+| 4. Pengaduan Postingan       | ReportController, Report model, migration reports               | Anggota 4                | Form pelaporan untuk postingan (misalnya: spam, tidak pantas). Hubungkan ke postingan dan user yang melaporkan                     |
+| 5. Profil UKM                | UKMController, UKM model, migration ukms                        | Anggota 5                | CRUD profil UKM (nama, deskripsi, logo, kontak). Dapat disesuaikan oleh masing-masing UKM                                          |
+| 6. Galeri Dokumentasi UKM    | GalleryController, Gallery model, migration galleries           | Anggota 6                | Upload dan list gambar kegiatan. Hanya bisa dilakukan oleh akun UKM yang terkait                                                   |
+| 7. Login & Register          | Auth (Breeze)                                                   | Semua (default)          | Breeze sudah menyediakan login & register. Bisa digunakan langsung.                                                                |
+| 8. Dashboard                 | DashboardController                                             | Frontend/UI              | Menampilkan data ringkasan, postingan terbaru, status pengguna, dll                                                                |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## **Cara Push dengan branch masing-masing nama**
+1. Buat branch
+   git checkout -b fitur-nama    <-- nama branch (bisa dibuat dengan nama fitur yang dikerjakan)
+5. Setelah mengedit => push branch ke github
+   git add .
+   git commit -m "feat: membuat fitur komentar dasar"
+   git push origin fitur-nama-fitur
+7. Buat pull request (PR) di github
+   Buka GitHub repository kamu.
+   Akan muncul tombol: “Compare & pull request” → klik.
+   Pastikan base branch = main, compare = fitur-nama.
+   Beri judul dan deskripsi PR (misalnya: "Menambahkan fitur komentar").
+   Klik “Create pull request”.
+9. Review & merge (Oleh ketua tim)
+   Setelah PR disetujui oleh tim, klik “Merge pull request”.
+   Klik “Confirm merge”.
+   Setelah merge, branch fitur-nama bisa dihapus jika sudah tidak dipakai.
+   
+## **Catatan Tambahan**
+1. Gunakan route web.php untuk halaman view, dan api.php untuk endpoint API (akses dari Postman atau frontend JS).
+2. Pastikan semua fitur ada validasi inputnya, baik di sisi controller maupun di database.
+3. Gunakan relasi antar model: misalnya Event hasMany Comments, User hasMany Registrations, dll.
+4. Setiap anggota kerja di branch masing-masing, lalu lakukan pull request ke branch main.
