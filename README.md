@@ -29,6 +29,7 @@ Aplikasi platform sistem informasi untuk mendukung kegiatan UKM di lingkungan ka
    php artisan key:generate
    php artisan migrate atau php artisan migrate:fresh
 8. Jalankan Server
+   ```terminal
    php artisan serve
 
 ## Struktur Folder Utama (Setelah Scaffold Laravel + Breeze + Fitur Awal)
@@ -102,9 +103,9 @@ Aplikasi platform sistem informasi untuk mendukung kegiatan UKM di lingkungan ka
    - Beri judul dan deskripsi PR (misalnya: "Menambahkan fitur komentar").
    - Klik “Create pull request”.
 9. Review & merge (Oleh ketua tim)
-   Setelah PR disetujui oleh tim, klik “Merge pull request”.
-   Klik “Confirm merge”.
-   Setelah merge, branch fitur-nama bisa dihapus jika sudah tidak dipakai.
+   - Setelah PR disetujui oleh tim, klik “Merge pull request”.
+   - Klik “Confirm merge”.
+   - Setelah merge, branch fitur-nama bisa dihapus jika sudah tidak dipakai.
    
 ## **Catatan Tambahan**
 1. Gunakan route web.php untuk halaman view, dan api.php untuk endpoint API (akses dari Postman atau frontend JS).
