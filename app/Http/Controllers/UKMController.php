@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Models\UKM;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\UKMProfileRequest;
 
 class UKMController extends Controller
 {
@@ -74,17 +78,5 @@ class UKMController extends Controller
     {
         $ukm = auth()->user()->ukm; // Assuming User has relation to UKM
         return view('ukm.profile', compact('ukm'));
-    }
-
-    // API: List all UKM profiles
-    public function indexApi()
-    {
-        return response()->json(UKM::all());
-    }
-
-    // API: Show specific UKM profile
-    public function showApi(UKM $ukm)
-    {
-        return response()->json($ukm);
     }
 }
