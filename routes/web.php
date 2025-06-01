@@ -38,9 +38,9 @@ Route::middleware(['auth', 'role:administrator'])->group(function () {
     Route::post('/admin/manage-comments', [CommentController::class, 'manage']);
 });
 
-// UKM (Penyelenggara)
+// UKM (Penyelenggara) yang membutuhkan verifikasi
 Route::middleware(['auth', 'role:ukm'])->group(function () {
-    // Dashboard
+    // Dashboard untuk UKM terverifikasi
     Route::get('/ukm/dashboard', [DashboardController::class, 'ukm'])->name('ukm.dashboard');
 
     Route::post('/ukm/post-event', [EventController::class, 'store']);

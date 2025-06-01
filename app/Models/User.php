@@ -20,6 +20,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    
     protected $fillable = [
         'name',
         'email',
@@ -44,13 +45,10 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'is_verified' => 'boolean',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'is_verified' => 'boolean'
+    ];
+
     public function isAdmin() {
         return $this->role === 'administrator';
     }
@@ -61,5 +59,13 @@ class User extends Authenticatable
 
     public function isMahasiswa() {
         return $this->role === 'mahasiswa';
+    }
+
+    public function hasRole(){
+        return in_array($this->role, [
+            self::ROLE_ADMIN,
+            self::ROLE_UKM,
+            self::ROLE_MAHASISWA
+        ]);
     }
 }
