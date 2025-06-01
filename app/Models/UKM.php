@@ -6,5 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class UKM extends Model
 {
-    //
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'description',
+        'logo',
+        'contact'
+    ];
 }

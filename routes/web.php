@@ -45,6 +45,9 @@ Route::middleware(['auth', 'role:ukm'])->group(function () {
 
     Route::post('/ukm/post-event', [EventController::class, 'store']);
     Route::get('/ukm/ukm-profile', [UKMController::class, 'profile']);
+
+    Route::resource('ukm', UKMController::class)->except(['show'])->middleware('auth', 'role:ukm');
+    
     Route::get('/ukm/ukm-gallery', [GalleryController::class, 'index']);
     Route::post('/ukm/comments', [CommentController::class, 'store']);
 });
