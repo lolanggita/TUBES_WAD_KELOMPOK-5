@@ -8,7 +8,7 @@ class StoreEventRequest extends FormRequest
 {
     public function authorize()
     {
-        // Hanya user yang punya middleware 'role:admin' yang sudah dicek di Controller/Route
+        // Hanya user yang punya middleware 'role:administrator' yang sudah dicek di Controller/Route
         // Jadi di sini kita return true.
         return true;
     }
