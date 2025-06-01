@@ -11,7 +11,10 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-
+    // konstanta role
+    const ROLE_ADMIN = 'administrator';
+    const ROLE_UKM = 'ukm';
+    const ROLE_MAHASISWA = 'mahasiswa';
     /**
      * The attributes that are mass assignable.
      *
@@ -21,6 +24,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'ukm_id',
+        'is_verified'
     ];
 
     /**
@@ -41,8 +47,19 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+            'is_verified' => 'boolean',
             'password' => 'hashed',
         ];
+    }
+    public function isAdmin() {
+        return $this->role === 'administrator';
+    }
+
+    public function isUkm() {
+        return $this->role === 'ukm';
+    }
+
+    public function isMahasiswa() {
+        return $this->role === 'mahasiswa';
     }
 }
