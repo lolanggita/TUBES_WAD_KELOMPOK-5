@@ -52,7 +52,6 @@ Route::middleware(['auth', 'role:ukm'])->group(function () {
     Route::post('/ukm/post-event', [EventController::class, 'store']);
     Route::get('/ukm/ukm-profile', [UKMController::class, 'profile']);
     Route::get('/ukm/ukm-gallery', [GalleryController::class, 'index']);
-    Route::post('/ukm/comments', [CommentController::class, 'store']);
 });
 
 // Mahasiswa
@@ -61,6 +60,12 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
     Route::get('/mahasiswa/dashboard', [DashboardController::class, 'mahasiswa'])->name('mahasiswa.dashboard');
 
     Route::get('/mahasiswa/registration-event', [EventRegistrationsController::class, 'registrationPage']);
-    Route::post('/mahasiswa/comments', [CommentController::class, 'store']);
     Route::post('/mahasiswa/submit-report', [ReportController::class, 'store']);
+});
+
+// Comment Routes - Bisa diakses oleh semua role yang sudah login
+Route::middleware('auth')->group(function () {
+    Route::post('/event/{event}/comment', [CommentController::class, 'store'])->name('comment.store');
+    Route::put('/comment/{comment}', [CommentController::class, 'update'])->name('comment.update');
+    Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
 });
