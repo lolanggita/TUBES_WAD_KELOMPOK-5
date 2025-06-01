@@ -20,7 +20,7 @@ class RoleMiddleware
 
         if (!$user) {
             // Jika belum login
-            return redirect()->route('login'); 
+            return redirect()->route('login'); // atau response lain sesuai kebutuhan
         }
 
         // Cek apakah role user termasuk yang diizinkan
