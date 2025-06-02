@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UKMController;
 use App\Http\Controllers\Api\GalleryController;
+use App\Http\Controllers\Api\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // UKM API
     Route::apiResource('ukms', UKMController::class);
+
+    // Comment API
+    Route::apiResource('comment', CommentController::class);
 
     // Optional: Cek user yang sedang login
     Route::get('/user', function (Request $request) {
