@@ -2,13 +2,47 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\UserController;
 
-Route::middleware('api')->get('/hello', function () {
-    return response()->json(['message' => 'Hello from API!']);
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\GalleryController;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application.
+| These routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group.
+|
+*/
+
+
+Route::get('/test-gallery', [GalleryController::class, 'index']);
+
+// Test route
+Route::get('/hello', function () {
+    return response()->json(['message' => 'Hello from Laravel API!']);
 });
 
-Route::apiResource('users', UserController::class)->only(['index', 'show']);
-
+// Authentication
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout']);
+
+// Protected Routes (Harus login)
+Route::middleware('auth:sanctum')->group(function () {
+
+    // User API
+    Route::apiResource('users', UserController::class)->only(['index', 'show']);
+
+    // Gallery API
+    Route::apiResource('galleries', GalleryController::class);
+
+    // Optional: Cek user yang sedang login
+    Route::get('/user', function (Request $request) {
+        return response()->json([
+            'success' => true,
+            'user' => $request->user()
+        ]);
+    });
+});

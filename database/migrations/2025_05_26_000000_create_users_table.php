@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('username')->unique(); // Username sebagai login utama
             $table->string('email')->nullable()->unique(); // Email menjadi opsional
+            $table->timestamp('email_verified_at')->nullable(); // ← Kolom baru ditambahkan di sini
             $table->string('password');
             $table->enum('role', ['admin', 'ukm', 'mahasiswa']);
             $table->foreignId('ukm_id')->nullable()->constrained('u_k_m_s');
@@ -46,7 +47,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('u_k_m_s');
+        Schema::dropIfExists('u_k_m_s'); // Pastikan ini sudah benar
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }
