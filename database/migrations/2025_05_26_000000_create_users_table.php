@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('username')->unique(); // Username sebagai login utama
-            $table->string('email')->nullable()->unique(); // Email menjadi opsional
-            $table->timestamp('email_verified_at')->nullable(); // ← Kolom baru ditambahkan di sini
+            $table->string('username')->unique();
+            $table->string('email')->nullable()->unique();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['admin', 'ukm', 'mahasiswa']);
             $table->foreignId('ukm_id')->nullable()->constrained('u_k_m_s');
@@ -41,13 +41,10 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('u_k_m_s'); // Pastikan ini sudah benar
+        Schema::dropIfExists('u_k_m_s');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }
