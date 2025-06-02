@@ -27,17 +27,26 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'UKM Musik',
             'username' => 'ukmmusik',
-            'email' => 'ukm@example.com',
+            'email' => 'ukmMusik@example.com',
             'password' => Hash::make('UUKM'),
             'role' => 'ukm',
-            'is_verified' => false, // bisa diganti true jika ingin langsung diverifikasi
+            'is_verified' => false, // tdidak bisa langsung masuk karena belum diverifikasi
+        ]);
+
+        User::factory()->create([
+            'name' => 'UKM Basket',
+            'username' => 'ukmbasket',
+            'email' => 'ukmBasket@example.com',
+            'password' => Hash::make('UUKM'),
+            'role' => 'ukm',
+            'is_verified' => true, // bisa langsung masuk karena sudah diverifikasi
         ]);
 
         // 10 Mahasiswa
         User::factory(10)->create([
             'role' => 'mahasiswa',
             'is_verified' => true,
-            'password' => Hash::make('MahaSigma'), // <-- tambahkan ini
+            'password' => Hash::make('MahaSigma'),
         ]);
     }
 }

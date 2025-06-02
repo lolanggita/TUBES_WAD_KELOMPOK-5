@@ -24,8 +24,10 @@ class LoginController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        // Cari user berdasarkan username
-        $user = User::where('username', $credentials['username'])->first();
+        // Cari user berdasarkan username atau email
+        $user = User::where('username', $credentials['username'])
+                    ->orWhere('email', $credentials['username'])
+                    ->first();
 
         // Periksa apakah user ada & password benar
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
