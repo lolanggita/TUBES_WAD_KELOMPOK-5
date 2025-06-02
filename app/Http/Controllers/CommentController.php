@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-// use Illuminate\Routing\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+// use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Event;
 
@@ -13,6 +13,10 @@ use App\Models\Event;
  */
 class CommentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->only(['store', 'update', 'destroy']);
+    }
     public function store(Request $request, Event $event)
     {
         $request->validate([

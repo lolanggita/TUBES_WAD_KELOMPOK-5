@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\UKM;
 use Illuminate\Support\Facades\Validator;
 
-class UKMController extends Controller
+class UkmController extends Controller
 {
     /**
      * Display a listing of the resource.
