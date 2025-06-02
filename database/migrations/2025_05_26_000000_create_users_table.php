@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            // $table->string('name');
-            // $table->string('username')->unique(); // Username sebagai login utama
-            // $table->string('email')->nullable()->unique(); // Email menjadi opsional
-            // $table->string('password');
-            // $table->enum('role', ['admin', 'ukm', 'mahasiswa']);
-            // $table->foreignId('ukm_id')->nullable()->constrained('u_k_m_s');
-            // $table->boolean('is_verified')->default(false);
+            $table->string('name');
+            $table->string('username')->unique();
+            $table->string('email')->nullable()->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->enum('role', ['admin', 'ukm', 'mahasiswa']);
+            $table->foreignId('ukm_id')->nullable()->constrained('u_k_m_s');
+            $table->boolean('is_verified')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
@@ -40,9 +41,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');

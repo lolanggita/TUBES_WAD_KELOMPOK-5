@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Gallery;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -67,5 +68,10 @@ class User extends Authenticatable
             self::ROLE_UKM,
             self::ROLE_MAHASISWA
         ]);
+    }
+    
+    public function galleries()
+    {
+        return $this->hasMany(Gallery::class, 'ukm_id');
     }
 }
