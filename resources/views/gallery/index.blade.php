@@ -1,25 +1,40 @@
 @extends('layouts.app')
 
+@section('title', 'Galeri UKM')
+
 @section('content')
 <div class="container">
-    <h1 class="text-2xl font-bold mb-4">Galeri Dokumentasi</h1>
-    <a href="{{ route('gallery.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Upload Foto Baru</a>
+    <h1>Galeri UKM</h1>
+    <p>Di sini kamu bisa melihat semua foto yang telah diunggah.</p>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        @foreach ($galleries as $item)
-            <div class="border rounded overflow-hidden shadow-md">
-                <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->title }}" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="font-semibold">{{ $item->title }}</h2>
-                    <p class="text-sm text-gray-600">{{ $item->description }}</p>
-                    <form action="{{ route('gallery.destroy', $item->id) }}" method="POST" class="mt-2">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="text-red-500 text-sm">Hapus</button>
-                    </form>
-                </div>
-            </div>
-        @endforeach
+    <!-- Form Upload -->
+    <div class="mb-4">
+        <a href="{{ route('gallery.create') }}" class="btn btn-primary">Upload Foto Baru</a>
     </div>
+
+    <!-- Daftar Foto -->
+    @if ($galleries->count() > 0)
+        <div class="row">
+            @foreach ($galleries as $gallery)
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ Storage::url($gallery->image_path) }}" alt="{{ $gallery->title }}" class="card-img-top" style="max-height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $gallery->title }}</h5>
+                            <p class="card-text">{{ $gallery->description ?? 'Tidak ada deskripsi' }}</p>
+                            <a href="{{ route('gallery.show', $gallery->id) }}" class="btn btn-sm btn-primary">Detail</a>
+                            <form action="{{ route('gallery.destroy', $gallery->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @else
+        <p>Tidak ada foto dalam galeri.</p>
+    @endif
 </div>
 @endsection

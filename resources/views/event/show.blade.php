@@ -61,25 +61,24 @@
                 </div>
             </div>
 
-            {{-- Komentar (jika fitur komentar sudah tersedia) --}}
-            <div class="bg-white shadow-sm rounded-lg p-6">
+            {{-- Bagian Komentar --}}
+            <div class="bg-white shadow-sm rounded-lg p-6" id="comments-section">
                 <h3 class="text-xl font-semibold text-gray-800 mb-4">Komentar</h3>
 
                 {{-- Form Tambah Komentar --}}
                 @auth
-                    <form action="{{ route('comments.store') }}" method="POST" class="mb-6">
+                    <form id="comment-form" class="mb-6">
                         @csrf
                         <input type="hidden" name="event_id" value="{{ $event->id }}">
 
                         <textarea
                             name="content"
                             rows="3"
+                            id="comment-content"
                             class="w-full mb-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             placeholder="Tulis komentar..."
                         ></textarea>
-                        @error('content')
-                            <p class="text-sm text-red-600 mb-2">{{ $message }}</p>
-                        @enderror
+                        <p id="error-message" class="text-sm text-red-600 mb-2 hidden"></p>
 
                         <button
                             type="submit"
@@ -89,24 +88,121 @@
                         </button>
                     </form>
                 @else
-                    <p class="text-gray-500 italic mb-4">Silakan login untuk memberikan komentar.</p>
+                    <p class="text-gray-500 italic mb-4">Silakan <a href="{{ route('login') }}" class="underline">login</a> untuk memberikan komentar.</p>
                 @endauth
 
-                {{-- Daftar Komentar --}}
-                @forelse ($event->comments as $comment)
-                    <div class="border-b border-gray-200 pb-4 mb-4">
-                        <div class="flex items-center mb-2">
-                            <span class="text-sm font-medium text-gray-800">{{ $comment->user->name }}</span>
-                            <span class="text-xs text-gray-500 ml-2">
-                                {{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}
-                            </span>
+                {{-- Daftar Komentar Dinamis --}}
+                <div id="comments-list">
+                    @foreach ($event->comments as $comment)
+                        <div class="border-b border-gray-200 pb-4 mb-4 comment-item">
+                            <div class="flex items-center mb-2">
+                                <span class="text-sm font-medium text-gray-800">{{ $comment->user->name }}</span>
+                                <span class="text-xs text-gray-500 ml-2">
+                                    {{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}
+                                </span>
+                            </div>
+                            <p class="text-gray-700">{{ $comment->content }}</p>
                         </div>
-                        <p class="text-gray-700">{{ $comment->content }}</p>
-                    </div>
-                @empty
-                    <p class="text-gray-500 italic">Belum ada komentar.</p>
-                @endforelse
+                    @endforeach
+                </div>
+
+                {{-- Pesan Kosong --}}
+                @if ($event->comments->isEmpty())
+                    <p id="no-comments" class="text-gray-500 italic mt-4">Belum ada komentar.</p>
+                @endif
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        const form = document.getElementById('comment-form');
+        const contentInput = document.getElementById('comment-content');
+        const errorMessage = document.getElementById('error-message');
+        const commentsList = document.getElementById('comments-list');
+        const noCommentsMessage = document.getElementById('no-comments');
+
+        // Submit komentar via Fetch API
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const content = formData.get('content').trim();
+            const eventId = formData.get('event_id');
+
+            if (!content) {
+                errorMessage.textContent = 'Konten komentar wajib diisi.';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            fetch("{{ route('api.comments.store', $event->id) }}", {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            })
+            .then(data => {
+                contentInput.value = '';
+                errorMessage.classList.add('hidden');
+
+                // Tampilkan pesan kosong jika sebelumnya muncul
+                if (noCommentsMessage) noCommentsMessage.style.display = 'none';
+
+                // Render komentar baru
+                const commentHTML = `
+                    <div class="border-b border-gray-200 pb-4 mb-4 comment-item">
+                        <div class="flex items-center mb-2">
+                            <span class="text-sm font-medium text-gray-800">${data.data.user.name}</span>
+                            <span class="text-xs text-gray-500 ml-2">${new Date(data.data.created_at).toLocaleString()}</span>
+                        </div>
+                        <p class="text-gray-700">${data.data.content}</p>
+                    </div>
+                `;
+                commentsList.insertAdjacentHTML('afterbegin', commentHTML);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                errorMessage.textContent = 'Gagal mengirim komentar. Silakan coba lagi.';
+                errorMessage.classList.remove('hidden');
+            });
+        });
+
+        // Optional: Auto-refresh komentar setiap beberapa detik
+        setInterval(() => {
+            fetch("{{ route('api.comments.index', $event->id) }}")
+                .then(res => res.json())
+                .then(comments => {
+                    commentsList.innerHTML = '';
+                    if (comments.length === 0 && noCommentsMessage) {
+                        noCommentsMessage.style.display = 'block';
+                    } else if (noCommentsMessage) {
+                        noCommentsMessage.style.display = 'none';
+                    }
+
+                    comments.forEach(comment => {
+                        const commentHTML = `
+                            <div class="border-b border-gray-200 pb-4 mb-4 comment-item">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-sm font-medium text-gray-800">${comment.user.name}</span>
+                                    <span class="text-xs text-gray-500 ml-2">${new Date(comment.created_at).toLocaleString()}</span>
+                                </div>
+                                <p class="text-gray-700">${comment.content}</p>
+                            </div>
+                        `;
+                        commentsList.innerHTML += commentHTML;
+                    });
+                });
+        }, 30000); // Refresh setiap 30 detik
+    </script>
+    @endpush
 </x-app-layout>

@@ -10,10 +10,10 @@ class CreateGalleriesTable extends Migration
     {
         Schema::create('galleries', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ukm_id')->constrained('users')->onDelete('cascade'); // asumsi user role UKM
+            $table->foreignId('ukm_id')->constrained('u_k_m_s')->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('image_path'); // path to stored image
+            $table->string('image_path');
             $table->timestamps();
         });
     }

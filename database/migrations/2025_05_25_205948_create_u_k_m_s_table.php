@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('u_k_m_s', function (Blueprint $table) {
             $table->id();
+             $table->string('name');
+            $table->text('description');
+           // $table->string('logo')->nullable();
+            $table->string('contact')->nullable();
             $table->timestamps();
         });
     }

@@ -33,9 +33,9 @@ return new class extends Migration
 
             // Foreign key ke tabel users
             $table->foreign('created_by')
-                  ->references('id')
-                  ->on('users')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 
