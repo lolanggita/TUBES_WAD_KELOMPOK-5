@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\UKMController;
 use App\Http\Controllers\Api\GalleryController;
 
 /*
@@ -17,10 +18,7 @@ use App\Http\Controllers\Api\GalleryController;
 |
 */
 
-
-Route::get('/test-gallery', [GalleryController::class, 'index']);
-
-// Test route
+// Test route (opsional)
 Route::get('/hello', function () {
     return response()->json(['message' => 'Hello from Laravel API!']);
 });
@@ -29,7 +27,7 @@ Route::get('/hello', function () {
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout']);
 
-// Protected Routes (Harus login)
+// Protected Routes (Harus login via Sanctum)
 Route::middleware('auth:sanctum')->group(function () {
 
     // User API
@@ -37,6 +35,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Gallery API
     Route::apiResource('galleries', GalleryController::class);
+
+    // UKM API
+    Route::apiResource('ukms', UKMController::class);
 
     // Optional: Cek user yang sedang login
     Route::get('/user', function (Request $request) {
